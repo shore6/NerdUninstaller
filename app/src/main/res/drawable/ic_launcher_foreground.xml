@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 取っ手 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M47,31h14v4h-14z" />
+    <!-- ふた -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M36,36h36v5h-36z" />
+    <!-- 本体 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M39,44L69,44L66.5,77L41.5,77Z" />
+    <!-- 溝 -->
+    <path
+        android:fillColor="@color/ic_launcher_background"
+        android:pathData="M46,49h3v23h-3zM52.5,49h3v23h-3zM59,49h3v23h-3z" />
+</vector>

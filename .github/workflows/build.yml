@@ -1,0 +1,47 @@
+name: Build APK
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 17
+
+      - uses: gradle/actions/setup-gradle@v4
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Rename APK
+        run: cp app/build/outputs/apk/debug/app-debug.apk NerdUninstaller.apk
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: NerdUninstaller
+          path: NerdUninstaller.apk
+
+      # main への push ごとに「latest」リリースを作り直し、スマホから直接 APK を落とせるようにする
+      - name: Publish latest release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete latest --cleanup-tag --yes || true
+          gh release create latest NerdUninstaller.apk \
+            --title "Latest build (#${{ github.run_number }})" \
+            --notes "main ブランチ ${{ github.sha }} からの自動ビルドです。" \
+            --prerelease \
+            --target ${{ github.sha }}
